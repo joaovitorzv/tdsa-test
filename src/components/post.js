@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -5,6 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Box from '@material-ui/core/Box'
 import { makeStyles } from '@material-ui/core/styles'
+
+import AlertModal from './alertModal'
 
 const postStyles = makeStyles((theme) => ({
   root: {
@@ -24,12 +27,15 @@ const postStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.main,
     fontSize: 14
   },
-  button: {
-    color: theme.palette.primary.main
+  postActions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(2)
   }
 }))
 
 function Post () {
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const classes = postStyles()
 
   return (
@@ -38,11 +44,15 @@ function Post () {
         <Typography className={classes.postTitle}>Teste maluco</Typography>
         <Typography className={classes.postBody}>Aqui esta tudo sobre o post maluco safe do brafe</Typography>
 
-        <Box display='flex' justifyContent='space-between'>
-          <Button size='small' variant='text' className={classes.button}>Editar</Button>
-          <IconButton aria-label='delete'>
-            <DeleteIcon fontSize='small' color='secondary' />
+        <Box className={classes.postActions}>
+          <Button color='primary' size='small' variant='text' className={classes.button}>Editar</Button>
+          <IconButton
+            aria-label='delete'
+            onClick={() => setOpenDeleteModal(true)}
+          >
+            <DeleteIcon fontSize='small' />
           </IconButton>
+          <AlertModal open={openDeleteModal} setOpen={setOpenDeleteModal} />
         </Box>
       </Box>
     </Grid>
