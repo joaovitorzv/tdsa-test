@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import AddIcon from '@material-ui/icons/Add'
@@ -5,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Box, Button, Typography } from '@material-ui/core'
 
 import Post from './components/post'
+import PostModal from './components/postModal'
 
 const postStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +23,7 @@ const postStyles = makeStyles((theme) => ({
 }))
 
 function App () {
+  const [openPostModal, setOpenPostModal] = useState(false)
   const classes = postStyles()
 
   return (
@@ -34,17 +37,22 @@ function App () {
           variant='contained'
           color='secondary'
           disableElevation
+          onClick={() => setOpenPostModal(true)}
         >
           Inserir novo post
         </Button>
+        <PostModal
+          open={openPostModal}
+          setOpen={setOpenPostModal}
+        />
       </Box>
       <Grid container spacing={1} p={2}>
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
+        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
+        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
+        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
+        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
+        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
       </Grid>
     </Container>
   )

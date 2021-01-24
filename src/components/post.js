@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box'
 import { makeStyles } from '@material-ui/core/styles'
 
 import AlertModal from './alertModal'
+import PostModal from './postModal'
 
 const postStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +35,7 @@ const postStyles = makeStyles((theme) => ({
   }
 }))
 
-function Post () {
+function Post ({ openPostModal, setOpenPostModal }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const classes = postStyles()
 
@@ -45,7 +46,15 @@ function Post () {
         <Typography className={classes.postBody}>Aqui esta tudo sobre o post maluco safe do brafe</Typography>
 
         <Box className={classes.postActions}>
-          <Button color='primary' size='small' variant='text' className={classes.button}>Editar</Button>
+          <Button
+            color='primary'
+            size='small'
+            variant='text'
+            onClick={() => setOpenPostModal(true)}
+          >
+            Editar
+          </Button>
+          <PostModal open={openPostModal} setOpen={setOpenPostModal} />
           <IconButton
             aria-label='delete'
             onClick={() => setOpenDeleteModal(true)}
