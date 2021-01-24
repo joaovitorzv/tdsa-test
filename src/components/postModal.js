@@ -1,26 +1,52 @@
+import { useState } from 'react'
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   TextField,
+  Box,
+  DialogContentText,
   DialogTitle
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
+import InsertComment from '@material-ui/icons/InsertComment'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 
-const validationSchema = yup.object().shape({
+const postValidation = yup.object().shape({
   title: yup.string('Adicione um título').required('Título é obrigatório'),
   body: yup.string('Digite o conteúdo do seu post').required('Conteúdo do post obrigatório')
 })
 
+const commentsValidation = yup.object().shape({
+  name: yup.string('Adicione seu nome').required('nome é obrigatorio'),
+  email: yup
+    .string('Adicione seu email')
+    .email('Email deve ser válido')
+    .required('Email é obrigatorio')
+})
+
+const postModalStyles = makeStyles({
+  modalContentText: {
+    marginBottom: 0
+  },
+  addCommentButton: {
+    margin: '16px 0'
+  }
+})
+
 function PostModal ({ open, setOpen, modalTitle, formData }) {
+  const [showCommentsForm, setShowCommentsForm] = useState(false)
+  const classes = postModalStyles()
+
   const handleClose = () => {
     setOpen(false)
+    setShowCommentsForm(false)
   }
 
-  const formik = useFormik({
-    validationSchema,
+  const formikPostForm = useFormik({
+    postValidation,
     initialValues: {
       title: formData?.title || '',
       body: formData?.body || ''
@@ -32,6 +58,18 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
     }
   })
 
+  const formikCommentsForm = useFormik({
+    commentsValidation,
+    initialValues: {
+      name: '',
+      email: '',
+      comment: ''
+    },
+    onSubmit: (values, { resetForm }) => {
+      alert(JSON.stringify(values, null, 2)) // eslint-disable-line
+    }
+  })
+
   return (
     <Dialog
       open={open}
@@ -40,35 +78,36 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
       aria-describedby='alert-dialog-description'
     >
       <DialogTitle id='alert-dialog-title'>{modalTitle}</DialogTitle>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formikPostForm.handleSubmit}>
         <DialogContent>
+          <DialogContentText className={classes.modalContentText} variant='subtitle2'>Post</DialogContentText>
           <TextField
             autoFocus
-            margin='dense'
+            margin='none'
             id='title'
-            label='Titulo do post'
+            label='Título'
             type='text'
             fullWidth
-            value={formik.values.title}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.title && Boolean(formik.errors.title)}
-            helperText={formik.touched.title && formik.errors.title}
+            value={formikPostForm.values.title}
+            onChange={formikPostForm.handleChange}
+            onBlur={formikPostForm.handleBlur}
+            error={formikPostForm.touched.title && Boolean(formikPostForm.errors.title)}
+            helperText={formikPostForm.touched.title && formikPostForm.errors.title}
           />
           <TextField
             margin='dense'
             id='body'
             multiline
             variant='filled'
-            rows={6}
-            label='Conteúdo do post'
+            rows={3}
+            label='Conteúdo'
             type='text'
             fullWidth
-            value={formik.values.body}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.body && Boolean(formik.errors.body)}
-            helperText={formik.touched.body && formik.errors.body}
+            value={formikPostForm.values.body}
+            onChange={formikPostForm.handleChange}
+            onBlur={formikPostForm.handleBlur}
+            error={formikPostForm.touched.body && Boolean(formikPostForm.errors.body)}
+            helperText={formikPostForm.touched.body && formikPostForm.errors.body}
           />
 
         </DialogContent>
@@ -77,14 +116,91 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
             Cancelar
           </Button>
           {modalTitle === 'Criar' && (
-            <Button disabled={Boolean(formik.errors.body)} type='submit'>
+            <Button disabled={Boolean(formikPostForm.errors.body)} type='submit'>
               Salvar e Continuar
             </Button>
           )}
-          <Button disabled={Boolean(formik.errors.body)} onClick={handleClose} color='primary' type='submit'>
+          <Button disabled={Boolean(formikPostForm.errors.body)} onClick={handleClose} color='primary' type='submit'>
             Salvar
           </Button>
         </DialogActions>
+      </form>
+
+      <form onSubmit={formikCommentsForm.handleSubmit}>
+        <DialogContent>
+          <DialogContentText className={classes.modalContentText} variant='subtitle2'>Comentários</DialogContentText>
+
+          {!showCommentsForm && (
+            <Button
+              startIcon={<InsertComment />}
+              size='large'
+              fullWidth
+              variant='contained'
+              color='secondary'
+              disableElevation
+              className={classes.addCommentButton}
+              onClick={() => setShowCommentsForm(true)}
+            >
+              Adicionar comentario
+            </Button>
+          )}
+
+          {showCommentsForm && (
+            <>
+              <Box display='flex' justifyContent='space-between'>
+                <TextField
+                  autoFocus
+                  margin='none'
+                  id='name'
+                  label='Nome'
+                  type='text'
+                  value={formikCommentsForm.values.title}
+                  onChange={formikCommentsForm.handleChange}
+                  onBlur={formikCommentsForm.handleBlur}
+                  error={formikCommentsForm.touched.title && Boolean(formikCommentsForm.errors.title)}
+                  helperText={formikCommentsForm.touched.title && formikCommentsForm.errors.title}
+                />
+                <TextField
+                  margin='none'
+                  id='email'
+                  label='Email'
+                  type='email'
+                  value={formikCommentsForm.values.title}
+                  onChange={formikCommentsForm.handleChange}
+                  onBlur={formikCommentsForm.handleBlur}
+                  error={formikCommentsForm.touched.title && Boolean(formikCommentsForm.errors.title)}
+                  helperText={formikCommentsForm.touched.title && formikCommentsForm.errors.title}
+                />
+              </Box>
+              <TextField
+                margin='dense'
+                id='comment'
+                multiline
+                variant='filled'
+                rows={2}
+                label='Comentário'
+                type='text'
+                fullWidth
+                value={formikCommentsForm.values.comment}
+                onChange={formikCommentsForm.handleChange}
+                onBlur={formikCommentsForm.handleBlur}
+                error={formikCommentsForm.touched.comment && Boolean(formikCommentsForm.errors.comment)}
+                helperText={formikCommentsForm.touched.comment && formikCommentsForm.errors.comment}
+              />
+            </>
+          )}
+
+        </DialogContent>
+        {showCommentsForm && (
+          <DialogActions>
+            <Button onClick={() => setShowCommentsForm(false)}>
+              Cancelar
+            </Button>
+            <Button disabled={Boolean(formikCommentsForm.errors.body)} onClick={handleClose} color='primary' type='submit'>
+              Salvar
+            </Button>
+          </DialogActions>
+        )}
       </form>
     </Dialog>
   )
