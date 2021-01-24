@@ -77,7 +77,7 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
             Cancelar
           </Button>
           {modalTitle === 'Criar' && (
-            <Button type='submit'>
+            <Button disabled={Boolean(formik.errors.body)} type='submit'>
               Salvar e Continuar
             </Button>
           )}
