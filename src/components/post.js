@@ -41,7 +41,7 @@ function Post ({ postData }) {
   const classes = postStyles()
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Grid item xs={12} sm={6}>
       <Box border={1} className={classes.root}>
         <Typography className={classes.postTitle}>{postData.title}</Typography>
         <Typography className={classes.postBody}>{postData.body}</Typography>
@@ -55,7 +55,12 @@ function Post ({ postData }) {
           >
             Editar
           </Button>
-          <PostModal open={openPostModal} setOpen={setOpenPostModal} />
+          <PostModal
+            formData={postData}
+            modalTitle='Editar'
+            open={openPostModal}
+            setOpen={setOpenPostModal}
+          />
           <IconButton
             aria-label='delete'
             onClick={() => setOpenDeleteModal(true)}

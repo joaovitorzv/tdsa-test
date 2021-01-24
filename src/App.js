@@ -60,10 +60,9 @@ function App () {
   const classes = appStyles()
 
   return (
-    <Container maxWidth='xl' className={classes.root}>
+    <Container maxWidth='md' className={classes.root}>
       <Box className={classes.addPost}>
         <Typography variant='h4' component='h2' gutterBottom color='secondary'>Posts</Typography>
-
         <Button
           startIcon={<AddIcon />}
           size='large'
@@ -75,6 +74,7 @@ function App () {
           Inserir novo post
         </Button>
         <PostModal
+          modalTitle='Criar'
           open={openComposeModal}
           setOpen={setOpenComposeModal}
         />

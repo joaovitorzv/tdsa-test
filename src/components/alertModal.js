@@ -33,7 +33,7 @@ function AlertModal ({ open, setOpen, postInfo }) {
       <DialogTitle id='alert-dialog-title'>Tem certeza?</DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          Você esté prestes a deletar
+          Você está prestes a deletar
         </DialogContentText>
         <Box className={classes.postInfo}>
           <DialogContentText variant='subtitle2'>{postInfo.title}</DialogContentText>

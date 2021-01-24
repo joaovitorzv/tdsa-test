@@ -6,11 +6,31 @@ import {
   TextField,
   DialogTitle
 } from '@material-ui/core'
+import * as yup from 'yup'
+import { useFormik } from 'formik'
 
-function PostModal ({ open, setOpen }) {
+const validationSchema = yup.object().shape({
+  title: yup.string('Adicione um título').required('Título é obrigatório'),
+  body: yup.string('Digite o conteúdo do seu post').required('Conteúdo do post obrigatório')
+})
+
+function PostModal ({ open, setOpen, modalTitle, formData }) {
   const handleClose = () => {
     setOpen(false)
   }
+
+  const formik = useFormik({
+    validationSchema,
+    initialValues: {
+      title: formData?.title || '',
+      body: formData?.body || ''
+    },
+    onSubmit: (values, { resetForm }) => {
+      console.log(values)
+      alert(JSON.stringify(values, null, 2)) // eslint-disable-line
+      resetForm({ values: '' })
+    }
+  })
 
   return (
     <Dialog
@@ -19,38 +39,48 @@ function PostModal ({ open, setOpen }) {
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
     >
-      <DialogTitle id='alert-dialog-title'>Criar</DialogTitle>
-      <DialogContent>
-        <form>
+      <DialogTitle id='alert-dialog-title'>{modalTitle}</DialogTitle>
+      <form onSubmit={formik.handleSubmit}>
+        <DialogContent>
           <TextField
             autoFocus
             margin='dense'
-            id='postTitle'
+            id='title'
             label='Titulo do post'
             type='text'
             fullWidth
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.title && Boolean(formik.errors.title)}
+            helperText={formik.touched.title && formik.errors.title}
           />
           <TextField
-            autoFocus
             margin='dense'
-            id='postBody'
+            id='body'
             multiline
             variant='filled'
             rows={6}
-            label='Conteudo do post'
+            label='Conteúdo do post'
             type='text'
             fullWidth
+            value={formik.values.body}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.body && Boolean(formik.errors.body)}
+            helperText={formik.touched.body && formik.errors.body}
           />
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>
-          Cancelar
-        </Button>
-        <Button onClick={handleClose} color='primary'>
-          Criar
-        </Button>
-      </DialogActions>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button disabled={Boolean(formik.errors.body)} onClick={handleClose} color='primary' type='submit'>
+            {modalTitle === 'Criar' ? 'Criar' : 'Salvar'}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   )
 }
