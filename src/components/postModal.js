@@ -76,8 +76,13 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
           <Button onClick={handleClose}>
             Cancelar
           </Button>
+          {modalTitle === 'Criar' && (
+            <Button type='submit'>
+              Salvar e Continuar
+            </Button>
+          )}
           <Button disabled={Boolean(formik.errors.body)} onClick={handleClose} color='primary' type='submit'>
-            {modalTitle === 'Criar' ? 'Criar' : 'Salvar'}
+            Salvar
           </Button>
         </DialogActions>
       </form>
