@@ -23,7 +23,7 @@ const postStyles = makeStyles((theme) => ({
 }))
 
 function App () {
-  const [openPostModal, setOpenPostModal] = useState(false)
+  const [openComposeModal, setOpenComposeModal] = useState(false)
   const classes = postStyles()
 
   return (
@@ -37,22 +37,22 @@ function App () {
           variant='contained'
           color='secondary'
           disableElevation
-          onClick={() => setOpenPostModal(true)}
+          onClick={() => setOpenComposeModal(true)}
         >
           Inserir novo post
         </Button>
         <PostModal
-          open={openPostModal}
-          setOpen={setOpenPostModal}
+          open={openComposeModal}
+          setOpen={setOpenComposeModal}
         />
       </Box>
       <Grid container spacing={1} p={2}>
-        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
-        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
-        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
-        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
-        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
-        <Post openPostModal={openPostModal} setOpenPostModal={setOpenPostModal} />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
       </Grid>
     </Container>
   )

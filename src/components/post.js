@@ -35,7 +35,8 @@ const postStyles = makeStyles((theme) => ({
   }
 }))
 
-function Post ({ openPostModal, setOpenPostModal }) {
+function Post () {
+  const [openPostModal, setOpenPostModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const classes = postStyles()
 
