@@ -9,8 +9,8 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
 import InsertComment from '@material-ui/icons/InsertComment'
+import { makeStyles } from '@material-ui/styles'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 
@@ -20,11 +20,15 @@ const postValidation = yup.object().shape({
 })
 
 const commentsValidation = yup.object().shape({
-  name: yup.string('Adicione seu nome').required('nome é obrigatorio'),
+  name: yup.string('Adicione seu nome').required('Nome é obrigatorio'),
   email: yup
     .string('Adicione seu email')
     .email('Email deve ser válido')
-    .required('Email é obrigatorio')
+    .required('Email é obrigatorio'),
+  comment: yup
+    .string('Adicione um comentário')
+    .min(3, 'Seu comentário deve ter no minímo 3 caracteres')
+    .required('Comentário é obrigatório')
 })
 
 const postModalStyles = makeStyles({
@@ -40,13 +44,13 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 
-  const handleClose = () => {
+  const handleClose = (resetForm) => {
     setOpen(false)
     setShowCommentsForm(false)
   }
 
   const formikPostForm = useFormik({
-    postValidation,
+    validationSchema: postValidation,
     initialValues: {
       title: formData?.title || '',
       body: formData?.body || ''
@@ -59,7 +63,7 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
   })
 
   const formikCommentsForm = useFormik({
-    commentsValidation,
+    validationSchema: commentsValidation,
     initialValues: {
       name: '',
       email: '',
@@ -112,15 +116,15 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>
+          <Button onClick={() => handleClose(formikPostForm.resetForm)}>
             Cancelar
           </Button>
           {modalTitle === 'Criar' && (
-            <Button disabled={Boolean(formikPostForm.errors.body)} type='submit'>
+            <Button disabled={!formikPostForm.isValid} type='submit'>
               Salvar e Continuar
             </Button>
           )}
-          <Button disabled={Boolean(formikPostForm.errors.body)} onClick={handleClose} color='primary' type='submit'>
+          <Button disabled={!formikPostForm.isValid} onClick={handleClose} color='primary' type='submit'>
             Salvar
           </Button>
         </DialogActions>
@@ -154,22 +158,22 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
                   id='name'
                   label='Nome'
                   type='text'
-                  value={formikCommentsForm.values.title}
+                  value={formikCommentsForm.values.name}
                   onChange={formikCommentsForm.handleChange}
                   onBlur={formikCommentsForm.handleBlur}
-                  error={formikCommentsForm.touched.title && Boolean(formikCommentsForm.errors.title)}
-                  helperText={formikCommentsForm.touched.title && formikCommentsForm.errors.title}
+                  error={formikCommentsForm.touched.name && Boolean(formikCommentsForm.errors.name)}
+                  helperText={formikCommentsForm.touched.name && formikCommentsForm.errors.name}
                 />
                 <TextField
                   margin='none'
                   id='email'
                   label='Email'
                   type='email'
-                  value={formikCommentsForm.values.title}
+                  value={formikCommentsForm.values.email}
                   onChange={formikCommentsForm.handleChange}
                   onBlur={formikCommentsForm.handleBlur}
-                  error={formikCommentsForm.touched.title && Boolean(formikCommentsForm.errors.title)}
-                  helperText={formikCommentsForm.touched.title && formikCommentsForm.errors.title}
+                  error={formikCommentsForm.touched.email && Boolean(formikCommentsForm.errors.email)}
+                  helperText={formikCommentsForm.touched.email && formikCommentsForm.errors.email}
                 />
               </Box>
               <TextField
