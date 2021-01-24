@@ -57,6 +57,7 @@ function Post ({ postData }) {
           </Button>
           <PostModal
             formData={postData}
+            modalAction='edit'
             modalTitle='Editar'
             open={openPostModal}
             setOpen={setOpenPostModal}

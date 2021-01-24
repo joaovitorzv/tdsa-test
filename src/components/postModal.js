@@ -40,11 +40,11 @@ const postModalStyles = makeStyles({
   }
 })
 
-function PostModal ({ open, setOpen, modalTitle, formData }) {
+function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 
-  const handleClose = (resetForm) => {
+  const handleClose = () => {
     setOpen(false)
     setShowCommentsForm(false)
   }
@@ -116,10 +116,10 @@ function PostModal ({ open, setOpen, modalTitle, formData }) {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleClose(formikPostForm.resetForm)}>
+          <Button onClick={handleClose}>
             Cancelar
           </Button>
-          {modalTitle === 'Criar' && (
+          {modalAction === 'create' && (
             <Button disabled={!formikPostForm.isValid} type='submit'>
               Salvar e Continuar
             </Button>

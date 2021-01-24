@@ -74,6 +74,7 @@ function App () {
           Inserir novo post
         </Button>
         <PostModal
+          modalAction='create'
           modalTitle='Criar'
           open={openComposeModal}
           setOpen={setOpenComposeModal}
