@@ -3,7 +3,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
+  TextField,
   DialogTitle
 } from '@material-ui/core'
 
@@ -19,18 +19,36 @@ function PostModal ({ open, setOpen }) {
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
     >
-      <DialogTitle id='alert-dialog-title'>Editar</DialogTitle>
+      <DialogTitle id='alert-dialog-title'>Criar</DialogTitle>
       <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
-          Aqui esta sobre o post maluco safe do brafe
-        </DialogContentText>
+        <form>
+          <TextField
+            autoFocus
+            margin='dense'
+            id='postTitle'
+            label='Titulo do post'
+            type='text'
+            fullWidth
+          />
+          <TextField
+            autoFocus
+            margin='dense'
+            id='postBody'
+            multiline
+            variant='filled'
+            rows={6}
+            label='Conteudo do post'
+            type='text'
+            fullWidth
+          />
+        </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>
           Cancelar
         </Button>
         <Button onClick={handleClose} color='primary'>
-          Deletar
+          Criar
         </Button>
       </DialogActions>
     </Dialog>

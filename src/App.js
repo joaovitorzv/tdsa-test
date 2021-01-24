@@ -8,7 +8,7 @@ import { Box, Button, Typography } from '@material-ui/core'
 import Post from './components/post'
 import PostModal from './components/postModal'
 
-const postStyles = makeStyles((theme) => ({
+const appStyles = makeStyles((theme) => ({
   root: {
     paddingTop: '2%'
   },
@@ -22,9 +22,42 @@ const postStyles = makeStyles((theme) => ({
 
 }))
 
+const postsMock = [
+  {
+    id: '1',
+    title: 'Post title mock 1',
+    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+  },
+  {
+    id: '2',
+    title: 'Post title mock 3',
+    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+  },
+  {
+    id: '3',
+    title: 'Post title mock 2',
+    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+  },
+  {
+    id: '4',
+    title: 'Post title mock 4',
+    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+  },
+  {
+    id: '5',
+    title: 'Post title mock 5',
+    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+  },
+  {
+    id: '6',
+    title: 'Post title mock 6',
+    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+  }
+]
+
 function App () {
   const [openComposeModal, setOpenComposeModal] = useState(false)
-  const classes = postStyles()
+  const classes = appStyles()
 
   return (
     <Container maxWidth='xl' className={classes.root}>
@@ -47,12 +80,9 @@ function App () {
         />
       </Box>
       <Grid container spacing={1} p={2}>
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+        {postsMock.map(post => (
+          <Post key={post.id} postData={post} />
+        ))}
       </Grid>
     </Container>
   )

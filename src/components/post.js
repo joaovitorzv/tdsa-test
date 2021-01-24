@@ -35,7 +35,7 @@ const postStyles = makeStyles((theme) => ({
   }
 }))
 
-function Post () {
+function Post ({ postData }) {
   const [openPostModal, setOpenPostModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const classes = postStyles()
@@ -43,8 +43,8 @@ function Post () {
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Box border={1} className={classes.root}>
-        <Typography className={classes.postTitle}>Teste maluco</Typography>
-        <Typography className={classes.postBody}>Aqui esta tudo sobre o post maluco safe do brafe</Typography>
+        <Typography className={classes.postTitle}>{postData.title}</Typography>
+        <Typography className={classes.postBody}>{postData.body}</Typography>
 
         <Box className={classes.postActions}>
           <Button
@@ -62,7 +62,7 @@ function Post () {
           >
             <DeleteIcon fontSize='small' />
           </IconButton>
-          <AlertModal open={openDeleteModal} setOpen={setOpenDeleteModal} />
+          <AlertModal postInfo={postData} open={openDeleteModal} setOpen={setOpenDeleteModal} />
         </Box>
       </Box>
     </Grid>

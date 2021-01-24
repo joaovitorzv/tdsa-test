@@ -1,13 +1,24 @@
 import {
   Button,
   Dialog,
+  Box,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 
-function AlertModal ({ open, setOpen }) {
+const alertStyles = makeStyles((theme) => ({
+  postInfo: {
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(2)
+  }
+}))
+
+function AlertModal ({ open, setOpen, postInfo }) {
+  const classes = alertStyles()
+
   const handleClose = () => {
     setOpen(false)
   }
@@ -19,11 +30,15 @@ function AlertModal ({ open, setOpen }) {
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
     >
-      <DialogTitle id='alert-dialog-title'>Tem certeza que deseja deletar?</DialogTitle>
+      <DialogTitle id='alert-dialog-title'>Tem certeza?</DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          Aqui esta sobre o post maluco safe do brafe
+          Você esté prestes a deletar
         </DialogContentText>
+        <Box className={classes.postInfo}>
+          <DialogContentText variant='subtitle2'>{postInfo.title}</DialogContentText>
+          <DialogContentText variant='body2'>{postInfo.body}</DialogContentText>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>
