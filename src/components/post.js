@@ -14,10 +14,11 @@ const postStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
     borderColor: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
+    marginBottom: theme.spacing(1)
   },
   postTitle: {
-    variant: 'subtitle2',
+    variant: 'subtitle1',
     color: theme.palette.secondary.main,
     component: 'h3',
     fontSize: 18,
@@ -41,7 +42,7 @@ function Post ({ postData }) {
   const classes = postStyles()
 
   return (
-    <Grid item xs={12} sm={6}>
+    <Grid item xs={12}>
       <Box border={1} className={classes.root}>
         <Typography className={classes.postTitle}>{postData.title}</Typography>
         <Typography className={classes.postBody}>{postData.body}</Typography>

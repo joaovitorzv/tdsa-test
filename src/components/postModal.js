@@ -200,7 +200,7 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
             <Button onClick={() => setShowCommentsForm(false)}>
               Cancelar
             </Button>
-            <Button disabled={Boolean(formikCommentsForm.errors.body)} onClick={handleClose} color='primary' type='submit'>
+            <Button disabled={!formikCommentsForm.isValid} onClick={handleClose} color='primary' type='submit'>
               Salvar
             </Button>
           </DialogActions>

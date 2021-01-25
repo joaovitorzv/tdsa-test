@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import AddIcon from '@material-ui/icons/Add'
@@ -22,42 +22,49 @@ const appStyles = makeStyles((theme) => ({
 
 }))
 
-const postsMock = [
-  {
-    id: '1',
-    title: 'Post title mock 1',
-    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
-  },
-  {
-    id: '2',
-    title: 'Post title mock 3',
-    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
-  },
-  {
-    id: '3',
-    title: 'Post title mock 2',
-    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
-  },
-  {
-    id: '4',
-    title: 'Post title mock 4',
-    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
-  },
-  {
-    id: '5',
-    title: 'Post title mock 5',
-    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
-  },
-  {
-    id: '6',
-    title: 'Post title mock 6',
-    body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
-  }
-]
+// const postsMock = [
+//   {
+//     id: '1',
+//     title: 'Post title mock 1',
+//     body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+//   },
+//   {
+//     id: '2',
+//     title: 'Post title mock 3',
+//     body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+//   },
+//   {
+//     id: '3',
+//     title: 'Post title mock 2',
+//     body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+//   },
+//   {
+//     id: '4',
+//     title: 'Post title mock 4',
+//     body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+//   },
+//   {
+//     id: '5',
+//     title: 'Post title mock 5',
+//     body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+//   },
+//   {
+//     id: '6',
+//     title: 'Post title mock 6',
+//     body: 'Post body bla bla bla writing some nothing to test hahaohohaoahaoh'
+//   }
+// ]
 
 function App () {
+  const [posts, setPosts] = useState([])
   const [openComposeModal, setOpenComposeModal] = useState(false)
   const classes = appStyles()
+
+  useEffect(() => {
+    window.fetch('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => response.json())
+      .then((json) => setPosts(json))
+  }, [])
 
   return (
     <Container maxWidth='md' className={classes.root}>
@@ -81,9 +88,11 @@ function App () {
         />
       </Box>
       <Grid container spacing={1} p={2}>
-        {postsMock.map(post => (
-          <Post key={post.id} postData={post} />
-        ))}
+        {posts[0]
+          ? posts.map(post => (
+            <Post key={post.id} postData={post} />
+            ))
+          : (<Typography variant='h1' component='h2'>Carregando</Typography>)}
       </Grid>
     </Container>
   )
