@@ -23,6 +23,13 @@ function AlertModal ({ open, setOpen, postInfo }) {
     setOpen(false)
   }
 
+  const handleDelete = () => {
+    window.fetch(`https://jsonplaceholder.typicode.com/posts/${postInfo.id}`, {
+      method: 'DELETE'
+    })
+    handleClose()
+  }
+
   return (
     <Dialog
       open={open}
@@ -33,7 +40,7 @@ function AlertModal ({ open, setOpen, postInfo }) {
       <DialogTitle id='alert-dialog-title'>Tem certeza?</DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          Você está prestes a deletar
+          Você está prestes a deletar:
         </DialogContentText>
         <Box className={classes.postInfo}>
           <DialogContentText variant='subtitle2'>{postInfo.title}</DialogContentText>
@@ -44,7 +51,7 @@ function AlertModal ({ open, setOpen, postInfo }) {
         <Button onClick={handleClose}>
           Cancelar
         </Button>
-        <Button onClick={handleClose} color='primary'>
+        <Button onClick={handleDelete} color='primary'>
           Deletar
         </Button>
       </DialogActions>
