@@ -1,47 +1,14 @@
-import { useContext, createContext, useReducer } from 'react'
+import { createContext, useState } from 'react'
 
-import { removePost, addPost } from './helpers/postsHelper'
+export const PostsContext = createContext(null)
 
-const PostStateContext = createContext()
-const PostDispatchContext = createContext()
+const { Provider } = PostsContext
 
-function postReducer (state, action) {
-  switch (action.type) {
-    case 'removePost': {
-      return { posts: addPost(state.posts, action.id) }
-    }
-    case 'addPost': {
-      return { posts: removePost(state.posts, action.post) }
-    }
-    default:
-      return state
-  }
+function PostsProvider ({ children }) {
+  const [state, setState] = useState([])
+
+  return <Provider value={[state, setState]}>{children}</Provider>
 }
+PostsProvider.context = PostsContext
 
-export function PostsProvider ({ children }) {
-  const [state, dispatch] = useReducer(postReducer, { posts: [] })
-
-  return (
-    <PostStateContext.Provider value={state}>
-      <PostDispatchContext.Provider value={dispatch}>
-        {children}
-      </PostDispatchContext.Provider>
-    </PostStateContext.Provider>
-  )
-}
-
-export function usePostState () {
-  const context = useContext(PostStateContext)
-  if (context === undefined) {
-    throw new Error('usePostState must be whithin a PostProvider')
-  }
-  return context
-}
-
-export function usePostDispatch () {
-  const context = useContext(PostDispatchContext)
-  if (context === undefined) {
-    throw new Error('usePostDispatch must be whithin a PostProvider')
-  }
-  return context
-}
+export default PostsProvider

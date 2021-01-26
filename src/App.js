@@ -8,7 +8,7 @@ import { Box, Button, Typography } from '@material-ui/core'
 import Post from './components/post'
 import PostModal from './components/postModal'
 
-import { PostsProvider, usePostDispatch, usePostState } from './hooks/posts'
+import PostsProvider from './hooks/posts'
 
 const appStyles = makeStyles((theme) => ({
   root: {
@@ -66,9 +66,6 @@ function App () {
       .then((response) => response.json())
       .then((json) => setPosts(json))
   }, [])
-
-  const loiros = usePostState()
-  console.log(loiros)
 
   return (
     <PostsProvider>
