@@ -8,6 +8,8 @@ import { Box, Button, Typography } from '@material-ui/core'
 import Post from './components/post'
 import PostModal from './components/postModal'
 
+import { PostsProvider, usePostDispatch, usePostState } from './hooks/posts'
+
 const appStyles = makeStyles((theme) => ({
   root: {
     paddingTop: '2%'
@@ -19,7 +21,6 @@ const appStyles = makeStyles((theme) => ({
       justifyContent: 'space-between'
     }
   }
-
 }))
 
 // const postsMock = [
@@ -66,35 +67,40 @@ function App () {
       .then((json) => setPosts(json))
   }, [])
 
+  const loiros = usePostState()
+  console.log(loiros)
+
   return (
-    <Container maxWidth='md' className={classes.root}>
-      <Box className={classes.addPost}>
-        <Typography variant='h4' component='h2' gutterBottom color='secondary'>Posts</Typography>
-        <Button
-          startIcon={<AddIcon />}
-          size='large'
-          variant='contained'
-          color='secondary'
-          disableElevation
-          onClick={() => setOpenComposeModal(true)}
-        >
-          Inserir novo post
-        </Button>
-        <PostModal
-          modalAction='create'
-          modalTitle='Criar'
-          open={openComposeModal}
-          setOpen={setOpenComposeModal}
-        />
-      </Box>
-      <Grid container spacing={1} p={2}>
-        {posts[0]
-          ? posts.map(post => (
-            <Post key={post.id} postData={post} />
-            ))
-          : (<Typography variant='h1' component='h2'>Carregando</Typography>)}
-      </Grid>
-    </Container>
+    <PostsProvider>
+      <Container maxWidth='md' className={classes.root}>
+        <Box className={classes.addPost}>
+          <Typography variant='h4' component='h2' gutterBottom color='secondary'>Posts</Typography>
+          <Button
+            startIcon={<AddIcon />}
+            size='large'
+            variant='contained'
+            color='secondary'
+            disableElevation
+            onClick={() => setOpenComposeModal(true)}
+          >
+            Inserir novo post
+          </Button>
+          <PostModal
+            modalAction='create'
+            modalTitle='Criar'
+            open={openComposeModal}
+            setOpen={setOpenComposeModal}
+          />
+        </Box>
+        <Grid container spacing={1} p={2}>
+          {posts[0]
+            ? posts.map(post => (
+              <Post key={post.id} postData={post} />
+              ))
+            : (<Typography variant='h1' component='h2'>Carregando</Typography>)}
+        </Grid>
+      </Container>
+    </PostsProvider>
   )
 }
 
