@@ -43,13 +43,26 @@ const postModalStyles = makeStyles({
 })
 
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
-  const { posts, addPost } = useContext(PostsContext)
+  const { posts, addPost, updatePost } = useContext(PostsContext)
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 
   const handleClose = () => {
     setOpen(false)
     setShowCommentsForm(false)
+  }
+
+  const handleAddPost = (post) => {
+    addPost({
+      userId: 1,
+      id: posts.length + 1,
+      title: post.title,
+      body: post.body
+    })
+  }
+
+  const handleUpdatePost = (updateValues) => {
+    updatePost(formData.id, updateValues)
   }
 
   const formikPostForm = useFormik({
@@ -59,12 +72,10 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
       body: formData?.body || ''
     },
     onSubmit: (values, { resetForm }) => {
-      addPost({
-        userId: 1,
-        id: posts.length + 1,
-        title: values.title,
-        body: values.body
-      })
+      modalAction === 'create'
+        ? handleAddPost(values)
+        : handleUpdatePost(values)
+
       resetForm({ values: '' })
     }
   })

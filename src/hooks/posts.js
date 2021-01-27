@@ -14,6 +14,18 @@ function PostsProvider ({ children }) {
     ])
   }
 
+  const updatePost = (postId, updateData) => {
+    const postIndex = posts.findIndex(post => post.id === postId)
+    const updatedPosts = [...posts]
+    updatedPosts[postIndex] = {
+      ...updatedPosts[postIndex],
+      title: updateData.title,
+      body: updateData.body
+    }
+    setPosts(updatedPosts)
+    console.log(posts)
+  }
+
   const deletePost = (postId) => {
     setPosts((prevState) => [
       ...prevState.filter(post => post.id !== postId)
@@ -26,6 +38,7 @@ function PostsProvider ({ children }) {
         posts,
         setPosts,
         addPost,
+        updatePost,
         deletePost
       }}
     >
