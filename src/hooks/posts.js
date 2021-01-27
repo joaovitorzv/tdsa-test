@@ -16,7 +16,7 @@ function PostsProvider ({ children }) {
 
   const deletePost = (postId) => {
     setPosts((prevState) => [
-      ...prevState.filter(id => id !== postId)
+      ...prevState.filter(post => post.id !== postId)
     ])
   }
 
