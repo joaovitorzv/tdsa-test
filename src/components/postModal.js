@@ -66,6 +66,7 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
   }
 
   const formikPostForm = useFormik({
+    enableReinitialize: true,
     validationSchema: postValidation,
     initialValues: {
       title: formData?.title || '',
