@@ -14,12 +14,19 @@ function PostsProvider ({ children }) {
     ])
   }
 
+  const deletePost = (postId) => {
+    setPosts((prevState) => [
+      ...prevState.filter(id => id !== postId)
+    ])
+  }
+
   return (
     <Provider
       value={{
         posts,
         setPosts,
-        addPost
+        addPost,
+        deletePost
       }}
     >
       {children}

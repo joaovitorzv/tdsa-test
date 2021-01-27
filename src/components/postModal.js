@@ -43,7 +43,7 @@ const postModalStyles = makeStyles({
 })
 
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
-  const { addPost, posts, setPosts } = useContext(PostsContext)
+  const { posts, addPost } = useContext(PostsContext)
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 

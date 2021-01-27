@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import {
   Button,
   Dialog,
@@ -9,6 +10,8 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
+import { PostsContext } from '../hooks/posts'
+
 const alertStyles = makeStyles((theme) => ({
   postInfo: {
     backgroundColor: theme.palette.background.default,
@@ -17,6 +20,7 @@ const alertStyles = makeStyles((theme) => ({
 }))
 
 function AlertModal ({ open, setOpen, postInfo }) {
+  const { deletePost } = useContext(PostsContext)
   const classes = alertStyles()
 
   const handleClose = () => {
@@ -24,6 +28,7 @@ function AlertModal ({ open, setOpen, postInfo }) {
   }
 
   const handleDelete = () => {
+    deletePost(postInfo.id)
     window.fetch(`https://jsonplaceholder.typicode.com/posts/${postInfo.id}`, {
       method: 'DELETE'
     })
