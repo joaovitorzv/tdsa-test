@@ -5,11 +5,15 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
 
+import PostsProvider from './hooks/posts'
+
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
+      <PostsProvider>
+        <CssBaseline />
+        <App />
+      </PostsProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
