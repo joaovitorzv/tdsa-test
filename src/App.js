@@ -33,13 +33,15 @@ function App () {
 
   const classes = appStyles()
 
-  const fetchPosts = () => {
-    window.fetch('https://jsonplaceholder.typicode.com/posts')
-      .then((response) => response.json())
-      .then((json) => setPosts(json))
-  }
+  useEffect(() => {
+    const fetchPosts = () => {
+      window.fetch('https://jsonplaceholder.typicode.com/posts')
+        .then((response) => response.json())
+        .then((json) => setPosts(json.reverse()))
+    }
 
-  useEffect(fetchPosts, [setPosts])
+    fetchPosts()
+  }, [])
 
   return (
     <Container maxWidth='md' className={classes.root}>
@@ -64,7 +66,7 @@ function App () {
       </Box>
       <Grid container spacing={1} p={2}>
         {posts[0]
-          ? posts.map(post => (
+          ? posts.reverse().map(post => (
             <Post key={post.id} postData={post} />
             ))
           : (<Typography variant='h1' component='h2'>Carregando</Typography>)}

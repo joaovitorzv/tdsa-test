@@ -7,10 +7,11 @@ const { Provider } = PostsContext
 function PostsProvider ({ children }) {
   const [posts, setPosts] = useState([])
 
-  const addPosts = (post) => {
-    setPosts({
-      posts: [...posts, post]
-    })
+  const addPost = (post) => {
+    setPosts((prevState) => [
+      post,
+      ...prevState
+    ])
   }
 
   return (
@@ -18,7 +19,7 @@ function PostsProvider ({ children }) {
       value={{
         posts,
         setPosts,
-        addPosts
+        addPost
       }}
     >
       {children}

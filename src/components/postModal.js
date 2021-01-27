@@ -14,6 +14,8 @@ import { makeStyles } from '@material-ui/styles'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 
+import { PostsContext } from '../hooks/posts'
+
 const postValidation = yup.object().shape({
   title: yup.string('Adicione um título').required('Título é obrigatório'),
   body: yup.string('Digite o conteúdo do seu post').required('Conteúdo do post obrigatório')
@@ -41,6 +43,7 @@ const postModalStyles = makeStyles({
 })
 
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
+  const { addPost, posts, setPosts } = useContext(PostsContext)
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 
@@ -56,8 +59,12 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
       body: formData?.body || ''
     },
     onSubmit: (values, { resetForm }) => {
-      console.log(values)
-      alert(JSON.stringify(values, null, 2)) // eslint-disable-line
+      addPost({
+        userId: 1,
+        id: posts.length + 1,
+        title: values.title,
+        body: values.body
+      })
       resetForm({ values: '' })
     }
   })
