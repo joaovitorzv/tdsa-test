@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
+import {
+  Grid,
+  Typography,
+  Button,
+  IconButton,
+  Box
+} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import Box from '@material-ui/core/Box'
 import { makeStyles } from '@material-ui/core/styles'
 
 import AlertModal from './alertModal'
@@ -14,8 +16,7 @@ const postStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
     borderColor: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.background.paper,
-    marginBottom: theme.spacing(1)
+    backgroundColor: theme.palette.background.paper
   },
   postTitle: {
     variant: 'subtitle1',
@@ -33,6 +34,19 @@ const postStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginTop: theme.spacing(2)
+  },
+  comments: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(2)
+  },
+  comment: {
+    paddingTop: theme.spacing(1),
+    fontSize: 12
+  },
+  userName: {
+    marginRight: theme.spacing(1),
+    color: theme.palette.secondary.main,
+    fontSize: 14
   }
 }))
 
@@ -72,6 +86,24 @@ function Post ({ postData }) {
           <AlertModal postInfo={postData} open={openDeleteModal} setOpen={setOpenDeleteModal} />
         </Box>
       </Box>
+      <Box className={classes.comments}>
+        <Typography variant='subtitle2' component='h3'>COMENTÁRIOS</Typography>
+        <Box className={classes.comment}>
+          <Typography variant='subtitle2' component='h4' className={classes.userName}>@joaovitor</Typography>
+          <Typography variant='body2' component='h4'>just commenting some nothing to test nothing thinking about nothing this all are nothing</Typography>
+        </Box>
+
+        <Box className={classes.comment}>
+          <Typography variant='subtitle2' component='h4' className={classes.userName}>@joaovitor</Typography>
+          <Typography variant='body2' component='h4'>just commenting some nothing to test nothing just commenting some nothing to test nothing just commenting some nothing to test nothing thinking about nothing this all are nothing</Typography>
+        </Box>
+
+        <Box className={classes.comment}>
+          <Typography variant='subtitle2' component='h4' className={classes.userName}>@joaovitor</Typography>
+          <Typography variant='body2' component='h4'>just commenting some nothing to test nothing thinking about nothing this all are nothing</Typography>
+        </Box>
+      </Box>
+
     </Grid>
   )
 }
