@@ -10,6 +10,8 @@ import PostModal from './components/postModal'
 
 import { PostsContext } from './hooks/posts'
 
+import brand from './assets/tdsa_logo.png'
+
 const appStyles = makeStyles((theme) => ({
   root: {
     paddingTop: '2%'
@@ -47,7 +49,7 @@ function App () {
     <Container maxWidth='md' className={classes.root}>
       <Box className={classes.addPost}>
         <Box>
-          <img src='./assets/tdsa_logotipo.png' alt='TDSA logo' />
+          <img src={brand} alt='TDSA logo' height='50px' />
         </Box>
         <Button
           startIcon={<AddIcon />}
