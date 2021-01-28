@@ -34,6 +34,7 @@ const commentsValidation = yup.object().shape({
 })
 
 const postModalStyles = makeStyles({
+
   modalContentText: {
     marginBottom: 0
   },

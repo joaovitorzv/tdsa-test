@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Grid,
   Typography,
@@ -47,13 +47,23 @@ const postStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     color: theme.palette.secondary.main,
     fontSize: 14
+  },
+  addComment: {
+    marginTop: theme.spacing(2)
   }
 }))
 
 function Post ({ postData }) {
+  const [comments, setComments] = useState([])
   const [openPostModal, setOpenPostModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const classes = postStyles()
+
+  useEffect(() => {
+    window.fetch(`https://jsonplaceholder.typicode.com/posts/${postData.id}/comments`)
+      .then((response) => response.json())
+      .then((json) => setComments(json))
+  }, [])
 
   return (
     <Grid item xs={12}>
@@ -88,22 +98,17 @@ function Post ({ postData }) {
       </Box>
       <Box className={classes.comments}>
         <Typography variant='subtitle2' component='h3'>COMENTÁRIOS</Typography>
-        <Box className={classes.comment}>
-          <Typography variant='subtitle2' component='h4' className={classes.userName}>@joaovitor</Typography>
-          <Typography variant='body2' component='h4'>just commenting some nothing to test nothing thinking about nothing this all are nothing</Typography>
-        </Box>
-
-        <Box className={classes.comment}>
-          <Typography variant='subtitle2' component='h4' className={classes.userName}>@joaovitor</Typography>
-          <Typography variant='body2' component='h4'>just commenting some nothing to test nothing just commenting some nothing to test nothing just commenting some nothing to test nothing thinking about nothing this all are nothing</Typography>
-        </Box>
-
-        <Box className={classes.comment}>
-          <Typography variant='subtitle2' component='h4' className={classes.userName}>@joaovitor</Typography>
-          <Typography variant='body2' component='h4'>just commenting some nothing to test nothing thinking about nothing this all are nothing</Typography>
-        </Box>
+        {comments[0]
+          ? comments.map(comment => (
+            <Box className={classes.comment} key={comment.id}>
+              <Typography variant='subtitle2' component='h4' className={classes.userName}>{comment.email}</Typography>
+              <Typography variant='body2' component='h4'>{comment.body}</Typography>
+            </Box>
+            ))
+          : (
+            <Typography variant='subtitle2' component='h4'>Carregando...</Typography>
+            )}
       </Box>
-
     </Grid>
   )
 }

@@ -46,7 +46,9 @@ function App () {
   return (
     <Container maxWidth='md' className={classes.root}>
       <Box className={classes.addPost}>
-        <Typography variant='h4' component='h2' gutterBottom color='secondary'>Posts</Typography>
+        <Box>
+          <img src='./assets/tdsa_logotipo.png' alt='TDSA logo' />
+        </Box>
         <Button
           startIcon={<AddIcon />}
           size='large'
@@ -64,7 +66,7 @@ function App () {
           setOpen={setOpenPostsModal}
         />
       </Box>
-      <Grid container spacing={1} p={2}>
+      <Grid container spacing={3} p={2}>
         {posts[0]
           ? posts.reverse().map(post => (
             <Post key={post.id} postData={post} />
