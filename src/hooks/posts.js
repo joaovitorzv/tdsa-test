@@ -49,6 +49,13 @@ function PostsProvider ({ children }) {
     return comments.filter(postComments => postComments.postId === postId)
   }
 
+  const addComment = (comment) => {
+    setComments((prevState) => [
+      comment,
+      ...prevState
+    ])
+  }
+
   return (
     <Provider
       value={{
@@ -59,7 +66,8 @@ function PostsProvider ({ children }) {
         updatePost,
         deletePost,
         setComments,
-        loadComments
+        loadComments,
+        addComment
       }}
     >
       {children}

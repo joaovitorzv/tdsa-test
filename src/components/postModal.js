@@ -46,7 +46,7 @@ const postModalStyles = makeStyles({
 })
 
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
-  const { posts, addPost, updatePost, loadComments } = useContext(PostsContext)
+  const { posts, addPost, updatePost, comments, loadComments, addComment } = useContext(PostsContext)
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 
@@ -57,7 +57,7 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
 
   const handleAddPost = (post) => {
     addPost({
-      userId: 1,
+      userId: 11,
       id: posts.length + 1,
       title: post.title,
       body: post.body
@@ -66,6 +66,15 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
 
   const handleUpdatePost = (updateValues) => {
     updatePost(formData.id, updateValues)
+  }
+
+  const handleAddComment = (comment) => {
+    addComment({
+      postId: formData?.id,
+      id: comments.length + 1,
+      email: comment.email,
+      body: comment.comment
+    })
   }
 
   const formikPostForm = useFormik({
@@ -92,7 +101,8 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
       comment: ''
     },
     onSubmit: (values, { resetForm }) => {
-      alert(JSON.stringify(values, null, 2)) // eslint-disable-line
+      handleAddComment(values)
+      resetForm({ values: '' })
     }
   })
 
@@ -224,7 +234,7 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
             <Button onClick={() => setShowCommentsForm(false)}>
               Cancelar
             </Button>
-            <Button disabled={!formikCommentsForm.isValid} onClick={handleClose} color='primary' type='submit'>
+            <Button disabled={!formikCommentsForm.isValid} color='primary' type='submit'>
               Salvar
             </Button>
           </DialogActions>
