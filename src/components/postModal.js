@@ -7,6 +7,7 @@ import {
   TextField,
   Box,
   IconButton,
+  Typography,
   DialogContentText,
   DialogTitle
 } from '@material-ui/core'
@@ -26,11 +27,11 @@ const postValidation = yup.object().shape({
 })
 
 const commentsValidation = yup.object().shape({
-  name: yup.string('Adicione seu nome').required('Nome é obrigatorio'),
+  name: yup.string('Adicione seu nome').required('Nome é obrigatório'),
   email: yup
     .string('Adicione seu email')
     .email('Email deve ser válido')
-    .required('Email é obrigatorio'),
+    .required('Email é obrigatório'),
   comment: yup
     .string('Adicione um comentário')
     .min(3, 'Seu comentário deve ter no minímo 3 caracteres')
@@ -52,6 +53,7 @@ const postModalStyles = makeStyles({
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
   const { posts, addPost, updatePost, comments, loadComments, addComment, deleteComment } = useContext(PostsContext)
   const [showCommentsForm, setShowCommentsForm] = useState(false)
+  const [allowComment, setAllowComment] = useState(true)
   const classes = postModalStyles()
 
   const handleClose = () => {
@@ -59,13 +61,35 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
     setShowCommentsForm(false)
   }
 
+  const handleShowCommentsForm = () => {
+    if (!formData?.id) {
+      setAllowComment(false)
+    }
+    setShowCommentsForm(true)
+  }
+
   const handleAddPost = (post) => {
-    addPost({
-      userId: 11,
-      id: posts.length + 1,
-      title: post.title,
-      body: post.body
+    window.fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: post.title,
+        body: post.body,
+        userId: 11
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
     })
+      .then((response) => response.json())
+      .then((post) => {
+        addPost({
+          userId: post.userId,
+          id: post.id,
+          title: post.title,
+          body: post.body
+        })
+        setAllowComment(true)
+      })
   }
 
   const handleUpdatePost = (updateValues) => {
@@ -191,9 +215,9 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
               color='secondary'
               disableElevation
               className={classes.addCommentButton}
-              onClick={() => setShowCommentsForm(true)}
+              onClick={handleShowCommentsForm}
             >
-              Adicionar comentario
+              Adicionar comentário
             </Button>
           )}
 
@@ -245,10 +269,13 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
         </DialogContent>
         {showCommentsForm && (
           <DialogActions>
+            {!allowComment && (
+              <Typography variant='caption' color='error'>Salve o post para adicionar comentários</Typography>
+            )}
             <Button onClick={() => setShowCommentsForm(false)}>
               Cancelar
             </Button>
-            <Button disabled={!formikCommentsForm.isValid} color='primary' type='submit'>
+            <Button disabled={!formikCommentsForm.isValid || !allowComment} color='primary' type='submit'>
               Salvar
             </Button>
           </DialogActions>
