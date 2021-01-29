@@ -5,7 +5,21 @@ export const PostsContext = createContext()
 const { Provider } = PostsContext
 
 function PostsProvider ({ children }) {
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      userId: 1,
+      title: 'fodase fodase',
+      body: 'Fodase 1 teste'
+    },
+    {
+      id: 2,
+      userId: 2,
+      title: 'fodase fodase',
+      body: 'Fodase 1 teste'
+    }
+  ])
+  const [comments, setComments] = useState([])
 
   const addPost = (post) => {
     setPosts((prevState) => [
@@ -23,7 +37,6 @@ function PostsProvider ({ children }) {
       body: updateData.body
     }
     setPosts(updatedPosts)
-    console.log(posts)
   }
 
   const deletePost = (postId) => {
@@ -32,14 +45,21 @@ function PostsProvider ({ children }) {
     ])
   }
 
+  const loadComments = (postId) => {
+    return comments.filter(postComments => postComments.postId === postId)
+  }
+
   return (
     <Provider
       value={{
         posts,
+        comments,
         setPosts,
         addPost,
         updatePost,
-        deletePost
+        deletePost,
+        setComments,
+        loadComments
       }}
     >
       {children}

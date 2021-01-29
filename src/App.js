@@ -30,7 +30,7 @@ const appStyles = makeStyles((theme) => ({
 // ]
 
 function App () {
-  const { posts, setPosts } = useContext(PostsContext)
+  const { posts, setPosts, setComments } = useContext(PostsContext)
   const [openPostsModal, setOpenPostsModal] = useState(false)
 
   const classes = appStyles()
@@ -39,10 +39,17 @@ function App () {
     const fetchPosts = () => {
       window.fetch('https://jsonplaceholder.typicode.com/posts')
         .then((response) => response.json())
-        .then((json) => setPosts(json.reverse()))
+        .then((json) => setPosts(json))
     }
 
-    fetchPosts()
+    const fetchComments = () => {
+      window.fetch('https://jsonplaceholder.typicode.com/comments')
+        .then((response) => response.json())
+        .then((postComments) => setComments(postComments))
+    }
+
+    // fetchPosts()
+    fetchComments()
   }, [])
 
   return (

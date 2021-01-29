@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import {
   Grid,
   Typography,
@@ -11,6 +11,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import AlertModal from './alertModal'
 import PostModal from './postModal'
+import Comment from './comment'
+
+import { PostsContext } from '../hooks/posts'
 
 const postStyles = makeStyles((theme) => ({
   root: {
@@ -54,16 +57,10 @@ const postStyles = makeStyles((theme) => ({
 }))
 
 function Post ({ postData }) {
-  const [comments, setComments] = useState([])
+  const { comments, loadComments } = useContext(PostsContext)
   const [openPostModal, setOpenPostModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const classes = postStyles()
-
-  useEffect(() => {
-    window.fetch(`https://jsonplaceholder.typicode.com/posts/${postData.id}/comments`)
-      .then((response) => response.json())
-      .then((json) => setComments(json))
-  }, [])
 
   return (
     <Grid item xs={12}>
@@ -86,6 +83,7 @@ function Post ({ postData }) {
             modalTitle='Editar'
             open={openPostModal}
             setOpen={setOpenPostModal}
+            comments={comments}
           />
           <IconButton
             aria-label='delete'
@@ -99,12 +97,10 @@ function Post ({ postData }) {
       <Box className={classes.comments}>
         <Typography variant='subtitle2' component='h3'>COMENTÁRIOS</Typography>
         {comments[0]
-          ? comments.map(comment => (
-            <Box className={classes.comment} key={comment.id}>
-              <Typography variant='subtitle2' component='h4' className={classes.userName}>{comment.email}</Typography>
-              <Typography variant='body2' component='h4'>{comment.body}</Typography>
-            </Box>
-            ))
+          ? loadComments(postData.id)
+              .map(comment => (
+                <Comment key={comment.id} comment={comment} />
+              ))
           : (
             <Typography variant='subtitle2' component='h4'>Carregando...</Typography>
             )}

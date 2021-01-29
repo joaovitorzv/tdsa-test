@@ -16,6 +16,8 @@ import { useFormik } from 'formik'
 
 import { PostsContext } from '../hooks/posts'
 
+import Comment from './comment'
+
 const postValidation = yup.object().shape({
   title: yup.string('Adicione um título').required('Título é obrigatório'),
   body: yup.string('Digite o conteúdo do seu post').required('Conteúdo do post obrigatório')
@@ -44,7 +46,7 @@ const postModalStyles = makeStyles({
 })
 
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
-  const { posts, addPost, updatePost } = useContext(PostsContext)
+  const { posts, addPost, updatePost, loadComments } = useContext(PostsContext)
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 
@@ -153,7 +155,9 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
       <form onSubmit={formikCommentsForm.handleSubmit}>
         <DialogContent>
           <DialogContentText className={classes.modalContentText} variant='subtitle2'>Comentários</DialogContentText>
-
+          {loadComments(formData?.id)[0] && loadComments(formData?.id).map(comment => (
+            <Comment comment={comment} key={comment.id} />
+          ))}
           {!showCommentsForm && (
             <Button
               startIcon={<InsertComment />}
