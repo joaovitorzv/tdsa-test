@@ -56,6 +56,12 @@ function PostsProvider ({ children }) {
     ])
   }
 
+  const deleteComment = (commentId) => {
+    setComments((prevState) => [
+      ...prevState.filter(comment => comment.id !== commentId)
+    ])
+  }
+
   return (
     <Provider
       value={{
@@ -67,7 +73,8 @@ function PostsProvider ({ children }) {
         deletePost,
         setComments,
         loadComments,
-        addComment
+        addComment,
+        deleteComment
       }}
     >
       {children}

@@ -6,9 +6,11 @@ import {
   DialogContent,
   TextField,
   Box,
+  IconButton,
   DialogContentText,
   DialogTitle
 } from '@material-ui/core'
+import DeleteIcon from '@material-ui/icons/Delete'
 import InsertComment from '@material-ui/icons/InsertComment'
 import { makeStyles } from '@material-ui/styles'
 import * as yup from 'yup'
@@ -36,17 +38,19 @@ const commentsValidation = yup.object().shape({
 })
 
 const postModalStyles = makeStyles({
-
   modalContentText: {
     marginBottom: 0
   },
   addCommentButton: {
     margin: '16px 0'
+  },
+  deleteCommentButton: {
+    borderRadius: 0
   }
 })
 
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
-  const { posts, addPost, updatePost, comments, loadComments, addComment } = useContext(PostsContext)
+  const { posts, addPost, updatePost, comments, loadComments, addComment, deleteComment } = useContext(PostsContext)
   const [showCommentsForm, setShowCommentsForm] = useState(false)
   const classes = postModalStyles()
 
@@ -166,7 +170,17 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
         <DialogContent>
           <DialogContentText className={classes.modalContentText} variant='subtitle2'>Comentários</DialogContentText>
           {loadComments(formData?.id)[0] && loadComments(formData?.id).map(comment => (
-            <Comment comment={comment} key={comment.id} />
+            <Box key={comment.id} display='flex' justifyContent='space-between'>
+              <Comment comment={comment} />
+              <IconButton
+                className={classes.deleteCommentButton}
+                aria-label='delete'
+                color='primary'
+                onClick={() => deleteComment(comment.id)}
+              >
+                <DeleteIcon fontSize='small' />
+              </IconButton>
+            </Box>
           ))}
           {!showCommentsForm && (
             <Button
