@@ -29,8 +29,8 @@ const postModalStyles = makeStyles({
   }
 })
 
-function FormPost ({ handleClose, formData, modalAction }) {
-  const { addPost, updatePost } = useContext(PostsContext)
+function FormPost ({ handleClose, formData, modalAction, bindSubmitFormPost, setCommentPostId }) {
+  const { addPost, updatePost, posts } = useContext(PostsContext)
   const classes = postModalStyles()
 
   const handleAddPost = (post) => {
@@ -48,11 +48,12 @@ function FormPost ({ handleClose, formData, modalAction }) {
       .then((response) => response.json())
       .then((post) => {
         addPost({
+          id: posts.length + 1,
           userId: post.userId,
-          id: post.id,
           title: post.title,
           body: post.body
         })
+        setCommentPostId(posts.length + 1)
       })
   }
 
@@ -75,6 +76,8 @@ function FormPost ({ handleClose, formData, modalAction }) {
       resetForm({ values: '' })
     }
   })
+
+  bindSubmitFormPost(formikPostForm.submitForm)
 
   return (
     <form onSubmit={formikPostForm.handleSubmit}>

@@ -9,7 +9,22 @@ import FormComment from './formComment'
 
 function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
   const [showCommentsForm, setShowCommentsForm] = useState(false)
-  const [allowComment, setAllowComment] = useState(true)
+  const [commentPostId, setCommentPostId] = useState()
+
+  let submitFormPost = null
+
+  const bindSubmitFormPost = (submitForm) => {
+    submitFormPost = submitForm
+  }
+
+  const handleSubmitFormPost = () => {
+    if (submitFormPost) {
+      setTimeout(() => {
+        submitFormPost()
+        return commentPostId
+      }, 3000)
+    }
+  }
 
   const handleClose = () => {
     setOpen(false)
@@ -28,14 +43,16 @@ function PostModal ({ open, setOpen, modalTitle, formData, modalAction }) {
         handleClose={handleClose}
         formData={formData}
         modalAction={modalAction}
+        bindSubmitFormPost={bindSubmitFormPost}
+        setCommentPostId={setCommentPostId}
       />
       <FormComment
         formData={formData}
         handleClose={handleClose}
-        setAllowComment={setAllowComment}
         setShowCommentsForm={setShowCommentsForm}
+        handleSubmitFormPost={handleSubmitFormPost}
         modalAction={modalAction}
-        allowComment={allowComment}
+        commentPostId={commentPostId}
         showCommentsForm={showCommentsForm}
       />
     </Dialog>

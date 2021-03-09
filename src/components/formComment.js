@@ -24,7 +24,7 @@ const commentsValidation = yup.object().shape({
     .string('Adicione seu email')
     .email('Email deve ser válido')
     .required('Email é obrigatório'),
-  comment: yup
+  body: yup
     .string('Adicione um comentário')
     .min(3, 'Seu comentário deve ter no minímo 3 caracteres')
     .required('Comentário é obrigatório')
@@ -42,21 +42,39 @@ const commentFormStyles = makeStyles({
   }
 })
 
-function FormComment ({ open, setOpen, formData, modalAction, setShowCommentsForm, showCommentsForm }) {
+function FormComment ({ formData, setShowCommentsForm, showCommentsForm, handleSubmitFormPost }) {
   const { comments, loadComments, deleteComment, addComment } = useContext(PostsContext)
   const classes = commentFormStyles()
 
-  const handleShowCommentsForm = () => {
-    setShowCommentsForm(true)
+  const handleAddComment = (comment) => {
+    window.fetch('https://jsonplaceholder.typicode.com/comments', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: comment.name,
+        body: comment.body,
+        email: comment.email,
+        postId: formData?.id
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    })
+      .then((response) => response.json())
+      .then((comment) => {
+        addComment({
+          postId: comment.postId,
+          id: comments.length + 1,
+          email: comment.email,
+          body: comment.body
+        })
+      })
   }
 
-  const handleAddComment = (comment) => {
-    addComment({
-      postId: formData?.id,
-      id: comments.length + 1,
-      email: comment.email,
-      body: comment.comment
+  const handleDeleteComment = (commentId) => {
+    window.fetch(`https://jsonplaceholder.typicode.com/comments/${commentId}`, {
+      method: 'DELETE'
     })
+    deleteComment(commentId)
   }
 
   const formikCommentsForm = useFormik({
@@ -64,11 +82,16 @@ function FormComment ({ open, setOpen, formData, modalAction, setShowCommentsFor
     initialValues: {
       name: '',
       email: '',
-      comment: ''
+      body: ''
     },
     onSubmit: (values, { resetForm }) => {
+      if (!formData) {
+        const postId = handleSubmitFormPost()
+        console.log(postId)
+      }
+
       handleAddComment(values)
-      resetForm({ values: '' })
+      // resetForm({ values: '' })
     }
   })
 
@@ -83,7 +106,7 @@ function FormComment ({ open, setOpen, formData, modalAction, setShowCommentsFor
               className={classes.deleteCommentButton}
               aria-label='delete'
               color='primary'
-              onClick={() => deleteComment(comment.id)}
+              onClick={() => handleDeleteComment(comment.id)}
             >
               <DeleteIcon fontSize='small' />
             </IconButton>
@@ -98,7 +121,7 @@ function FormComment ({ open, setOpen, formData, modalAction, setShowCommentsFor
             color='secondary'
             disableElevation
             className={classes.addCommentButton}
-            onClick={handleShowCommentsForm}
+            onClick={() => setShowCommentsForm(true)}
           >
             Adicionar comentário
           </Button>
@@ -133,18 +156,18 @@ function FormComment ({ open, setOpen, formData, modalAction, setShowCommentsFor
             </Box>
             <TextField
               margin='dense'
-              id='comment'
+              id='body'
               multiline
               variant='filled'
               rows={2}
               label='Comentário'
               type='text'
               fullWidth
-              value={formikCommentsForm.values.comment}
+              value={formikCommentsForm.values.body}
               onChange={formikCommentsForm.handleChange}
               onBlur={formikCommentsForm.handleBlur}
-              error={formikCommentsForm.touched.comment && Boolean(formikCommentsForm.errors.comment)}
-              helperText={formikCommentsForm.touched.comment && formikCommentsForm.errors.comment}
+              error={formikCommentsForm.touched.body && Boolean(formikCommentsForm.errors.body)}
+              helperText={formikCommentsForm.touched.body && formikCommentsForm.errors.body}
             />
           </>
         )}
